@@ -1,15 +1,4 @@
-/*  ---------- AÇIKLAMA -----------------
-
-Bu bölümde, tek class içerisinde birden çok widget olduğunda class ağırlaşacağı için
-widgetları ayrı classlara ayırdık ve bu alt üst widget arasında constuctor parametreleri ile
-veri gönderdik.
-
-
-
- */
-
 import 'package:flutter/material.dart';
-
 
 void main(){
   runApp(Bolum8());
@@ -101,16 +90,16 @@ class sinifListesi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-    children: [
-      for(var o in ogrenciler)(
-          Text(
-            o,
-            style: TextStyle(
-              fontSize: 22,
-            ),
-          )
-      ),
-    ],
+      children: [
+        for(var o in ogrenciler)(
+            Text(
+              o,
+              style: TextStyle(
+                fontSize: 22,
+              ),
+            )
+        ),
+      ],
     );
   }
 }
