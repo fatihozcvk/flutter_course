@@ -1,3 +1,13 @@
+/*  ---------- AÇIKLAMA -----------------
+
+bolum 8.2 de widgetlar arasındaki veri transferini constrcutorlar aracılığıyla
+yapmıştık bu bölümde inherited widget kullanarak alt sınıf ile üst sınıf arasında
+iletişim kurulmasını sağlayacağız.
+
+
+
+ */
+
 import 'package:flutter/material.dart';
 
 void main(){
@@ -18,7 +28,7 @@ class _Bolum8State extends State<Bolum8> {
 
   void yeniOgrenciEkle(String yeniOgrenci){
     setState(() {
-      ogrenciler.add(yeniOgrenci);
+      ogrenciler = [...ogrenciler, yeniOgrenci];
     });
   }
 
@@ -31,30 +41,54 @@ class _Bolum8State extends State<Bolum8> {
         appBar: AppBar(
           backgroundColor: Colors.blueGrey,
         ),
-        body: sinif(
+        body: SinifBilgisi(
             baslik: baslik,
             ogrenciler: ogrenciler,
-            yeniOgrenciEkle : yeniOgrenciEkle
+            yeniOgrenciEkle : yeniOgrenciEkle,
+            child: sinif(),
         ),
       ),
     );
   }
 }
 
-class sinif extends StatelessWidget {
-  const sinif({
+class SinifBilgisi extends InheritedWidget {
+  const SinifBilgisi({
     super.key,
+    required this.child,
     required this.baslik,
     required this.ogrenciler,
     required this.yeniOgrenciEkle,
-  });
 
+  }) : super(child: child);
+
+  final Widget child;
   final String baslik;
   final List<String> ogrenciler;
   final void Function(String yeniOgrenci) yeniOgrenciEkle;
 
+  static SinifBilgisi of(BuildContext context) {
+    final SinifBilgisi? result = context.dependOnInheritedWidgetOfExactType<SinifBilgisi>();
+    assert(result != null, 'No SinifBilgisi found in context');
+    return result!;
+  }
+
+  @override
+  bool updateShouldNotify(SinifBilgisi old) {
+    return baslik != old.baslik ||
+    ogrenciler != old.ogrenciler ||
+    yeniOgrenciEkle != old.yeniOgrenciEkle;
+  }
+}
+
+class sinif extends StatelessWidget {
+  const sinif({
+    super.key,
+  });
+
   @override
   Widget build(BuildContext context) {
+    final sinifbilgisi = SinifBilgisi.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -64,7 +98,7 @@ class sinif extends StatelessWidget {
           children: [
             Icon(Icons.star),
             Text(
-              baslik,
+              sinifbilgisi.baslik,
               style: TextStyle(
                 fontSize: 45,
               ),
@@ -72,8 +106,8 @@ class sinif extends StatelessWidget {
             Icon(Icons.star),
           ],
         ),
-        sinifListesi(ogrenciler: ogrenciler),
-        ogrenciEkleme(yeniOgrenciEkle : yeniOgrenciEkle),
+        sinifListesi(),
+        ogrenciEkleme(),
       ],
     );
   }
@@ -82,16 +116,14 @@ class sinif extends StatelessWidget {
 class sinifListesi extends StatelessWidget {
   const sinifListesi({
     super.key,
-    required this.ogrenciler,
   });
-
-  final List<String> ogrenciler;
 
   @override
   Widget build(BuildContext context) {
+    final sinifbilgisi = SinifBilgisi.of(context);
     return Column(
       children: [
-        for(var o in ogrenciler)(
+        for(var o in sinifbilgisi.ogrenciler)(
             Text(
               o,
               style: TextStyle(
@@ -106,10 +138,8 @@ class sinifListesi extends StatelessWidget {
 
 class ogrenciEkleme extends StatefulWidget {
   const ogrenciEkleme({
-    super.key, required this.yeniOgrenciEkle,
+    super.key,
   });
-
-  final void Function(String yeniOgrenci) yeniOgrenciEkle;
 
 
   @override
@@ -129,6 +159,7 @@ class _ogrenciEklemeState extends State<ogrenciEkleme> {
 
   @override
   Widget build(BuildContext context) {
+    final sinifbilgisi = SinifBilgisi.of(context);
     return Column(
       children: [
         TextField(
@@ -142,12 +173,8 @@ class _ogrenciEklemeState extends State<ogrenciEkleme> {
         ElevatedButton(
             onPressed: controller.text.isEmpty ? null :(){
               yenieleman = controller.text;
-              widget.yeniOgrenciEkle(yenieleman);
+              sinifbilgisi.yeniOgrenciEkle(yenieleman);
               controller.text = "";
-
-              //  setState(() {
-              //   ogrenciler.add("yeni isim");
-              //   });
             },
             child: Text(
               "EKLE",
