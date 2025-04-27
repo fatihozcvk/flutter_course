@@ -141,7 +141,6 @@ class ogrenciEkleme extends StatefulWidget {
     super.key,
   });
 
-
   @override
   State<ogrenciEkleme> createState() => _ogrenciEklemeState();
 }

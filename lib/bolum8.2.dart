@@ -117,11 +117,11 @@ class sinifListesi extends StatelessWidget {
 
 class ogrenciEkleme extends StatefulWidget {
   const ogrenciEkleme({
-    super.key, required this.yeniOgrenciEkle,
+    super.key,
+    required this.yeniOgrenciEkle,
   });
 
   final void Function(String yeniOgrenci) yeniOgrenciEkle;
-
 
   @override
   State<ogrenciEkleme> createState() => _ogrenciEklemeState();
