@@ -63,6 +63,7 @@ class Sayfa1 extends StatelessWidget {
   }
 }
 
+
 class Sayfa2 extends StatelessWidget {
   const Sayfa2({super.key});
 
