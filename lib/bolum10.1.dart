@@ -104,6 +104,8 @@ class Sayfa2 extends StatelessWidget {
       ),
 
 
+
+
     );
   }
 }
