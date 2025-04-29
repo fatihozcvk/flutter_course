@@ -1,18 +1,14 @@
 /*  ---------- AÇIKLAMA -----------------
 
-Bu bölümde Ekranlar arası geçite veri gönderme ve veri alma ile
-alakalı basit bir örnek yaptk,
+Bu bölümde önceki örnekteki versiyondan farklı olarak :
 
-önce ikinci ekrana bir String parametresi yolladık, bunu ikinci ekran
-kullanıd
-
-ikinci ekrandanki bir parametreyi de birinci ekrana yollamış olduk.
-
-Ayrıca willPopScope widget'ının nasıl kullanılması gerektiğine basit bir örnek yapmış oldum.
+Future konusunu kullnarak .then .whencomplete gibi kavramları kullanan küçük bir örnek yapmış olduk.
 
 
 
  */
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 void main(){
@@ -50,12 +46,37 @@ class Sayfa1 extends StatelessWidget {
           style: ElevatedButton.styleFrom(
               backgroundColor: Colors.deepOrange
           ),
-          onPressed: () async {
-            final sonuc = await Navigator.of(context).push<String>(
+          onPressed: () {
+                Future pushFuture = Navigator.of(context).push<bool>(
                 MaterialPageRoute(builder: (context) => Sayfa2("Görseli beğendiniz mi ?"),
                 )
-            );
-            print(sonuc);
+                ).then((bool? cevap) {
+                  if (cevap==true){
+                    print('begendi!!');
+                    return Future.value(true);
+                  }
+                  else{
+                    print('begenmedi!!');
+                    return Navigator.of(context).push<bool>(
+                        MaterialPageRoute(builder: (context) => Sayfa2("Keşke beğenseydiniz :( Görseli beğendiniz mi ?"),
+                        )
+                    );
+                  }
+                }).then((value) {
+                  if (value == true){
+                    print('begendinizzz !!');
+                  }
+                  else{
+                    print('begenmediniz  !!');
+                  }
+                }).whenComplete(() {
+                  print('------------ iş bitti ---------------');
+                },);
+
+                print("devam eden işler");
+
+
+
           },
           child: Text(
             "2. EKRANA GEÇ",
@@ -63,7 +84,7 @@ class Sayfa1 extends StatelessWidget {
                 color: Colors.white
             ),
           )
-        ),
+      ),
 
 
       ),
@@ -101,7 +122,7 @@ class Sayfa2 extends StatelessWidget {
               ),
               Container(
                   height: 400,
-                  child: Image.network("https://st.depositphotos.com/67903508/59949/i/950/depositphotos_599493982-stock-photo-vertical-shot-bosphorus-bridge-sunset.jpg")
+                  // child: Image.network("https://st.depositphotos.com/67903508/59949/i/950/depositphotos_599493982-stock-photo-vertical-shot-bosphorus-bridge-sunset.jpg")
               ),
               SizedBox(
                 height: 25,
@@ -112,7 +133,7 @@ class Sayfa2 extends StatelessWidget {
                       backgroundColor: Colors.deepOrange
                   ) ,
                   onPressed: (){
-                    Navigator.of(context).maybePop("evet");
+                    Navigator.of(context).pop(true);
                   } ,
                   child: Text(
                     "EVET",
@@ -126,7 +147,7 @@ class Sayfa2 extends StatelessWidget {
                       backgroundColor: Colors.deepOrange
                   ) ,
                   onPressed: (){
-                    Navigator.of(context).maybePop("hayır");
+                    Navigator.of(context).pop(false);
                   } ,
                   child: Text(
                     "HAYIR",
