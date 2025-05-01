@@ -59,8 +59,6 @@ class Sayfa1 extends StatelessWidget {
 
 
       ),
-
-
     );
   }
 
