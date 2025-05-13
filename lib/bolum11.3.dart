@@ -13,17 +13,17 @@ import 'package:flutter/material.dart';
 
 
 void main(){
-  runApp(Bolum12());
+  runApp(Bolum11());
 }
 
-class Bolum12 extends StatefulWidget {
-  const Bolum12({super.key});
+class Bolum11 extends StatefulWidget {
+  const Bolum11({super.key});
 
   @override
-  State<Bolum12> createState() => _Bolum12State();
+  State<Bolum11> createState() => _Bolum11State();
 }
 
-class _Bolum12State extends State<Bolum12> {
+class _Bolum11State extends State<Bolum11> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
